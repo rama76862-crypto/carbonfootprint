@@ -1,0 +1,283 @@
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: 100%;
+}
+
+.dashboard-header {
+  border-bottom: 1px solid rgba(244, 249, 244, 0.05);
+  padding-bottom: 1rem;
+}
+
+/* Mini Stat Cards Grid */
+.mini-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+}
+
+.mini-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem;
+  transition: var(--transition);
+}
+
+.mini-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(46, 204, 113, 0.15);
+}
+
+.mini-card-icon-wrapper {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* Icons styling for mini cards */
+.total-icon { background: rgba(46, 204, 113, 0.1); color: var(--color-accent); border: 1px solid rgba(46, 204, 113, 0.15); }
+.best-icon { background: rgba(52, 152, 219, 0.1); color: #3498DB; border: 1px solid rgba(52, 152, 219, 0.15); }
+.biggest-icon { background: rgba(243, 156, 18, 0.1); color: var(--color-warning); border: 1px solid rgba(243, 156, 18, 0.15); }
+.logged-icon { background: rgba(155, 89, 182, 0.1); color: #9B59B6; border: 1px solid rgba(155, 89, 182, 0.15); }
+
+.mini-card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.mini-card-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--color-text-muted);
+}
+
+.mini-card-value {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-text);
+  line-height: 1.1;
+}
+
+/* Two-Column Grid */
+.dashboard-main-grid {
+  display: grid;
+  grid-template-columns: 65% 35%;
+  gap: 1.5rem;
+}
+
+.left-dashboard-col, .right-dashboard-col {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Recharts Wrapper */
+.chart-card {
+  padding: 1.75rem;
+}
+
+.chart-wrapper {
+  margin-top: 1.5rem;
+  width: 100%;
+}
+
+.widget-card {
+  padding: 1.75rem;
+}
+
+/* Circular SVG Progress Ring */
+.progress-ring-container {
+  margin: 1.5rem 0 0.5rem;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.progress-ring circle {
+  transition: stroke-dashoffset 0.8s ease-in-out;
+}
+
+.ring-text-value {
+  font-family: var(--font-display);
+  font-size: 2.25rem;
+  font-weight: 800;
+  fill: var(--color-text);
+}
+
+.ring-text-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  fill: var(--color-text-muted);
+}
+
+/* Comparison Rows */
+.comparison-rows {
+  width: 100%;
+  border-top: 1px solid rgba(244, 249, 244, 0.06);
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.comp-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.comp-val {
+  font-family: var(--font-display);
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.15rem;
+}
+
+.comp-val.red { color: var(--color-danger); }
+.comp-val.green { color: var(--color-accent); }
+
+/* Donut center placement label */
+.donut-chart-wrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.donut-center-label {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.donut-center-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  letter-spacing: 0.5px;
+}
+
+/* Streak Heatmap Widget */
+.streak-fire-icon {
+  color: #E74C3C;
+  filter: drop-shadow(0 0 4px rgba(231, 76, 60, 0.4));
+  animation: flickerFire 1.5s infinite alternate ease-in-out;
+}
+
+@keyframes flickerFire {
+  0% { transform: scale(1); opacity: 0.85; }
+  100% { transform: scale(1.08); opacity: 1; }
+}
+
+.heatmap-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.gap-sm {
+  gap: 0.5rem;
+}
+
+.heatmap-days-labels {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+  margin-top: 1rem;
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  font-weight: 600;
+}
+
+.heatmap-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+  margin-top: 0.5rem;
+}
+
+.heatmap-cell {
+  aspect-ratio: 1;
+  border-radius: 4px;
+  background: var(--color-surface-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: var(--transition-fast);
+}
+
+.heatmap-cell:hover {
+  filter: brightness(1.15);
+}
+
+.heatmap-cell.logged {
+  background: var(--color-accent);
+  box-shadow: 0 0 6px rgba(46, 204, 113, 0.2);
+}
+
+.heatmap-cell.empty {
+  background: transparent;
+  border: 1px solid rgba(244, 249, 244, 0.02);
+}
+
+.heatmap-day-number {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 500;
+  color: var(--color-text-muted);
+}
+
+.heatmap-cell.logged .heatmap-day-number {
+  color: var(--color-bg);
+  font-weight: 600;
+}
+
+/* Responsive Queries */
+@media (max-width: 992px) {
+  .mini-cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .dashboard-main-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 576px) {
+  .mini-cards-grid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+  
+  .mini-card {
+    padding: 1rem;
+  }
+}
