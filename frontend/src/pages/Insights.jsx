@@ -1,10 +1,15 @@
-import React from 'react';
+import { useEffect } from 'react';
 import { useCarbonContext } from '../context/CarbonContext';
-import { Car, Home, Utensils, ShoppingBag, Info } from 'lucide-react';
+import { Car, Home, Utensils, ShoppingBag, Info, Sparkles } from 'lucide-react';
 import './Pages.css';
 
 export default function Insights() {
-  const { emissionsData } = useCarbonContext();
+  const { emissionsData, assistantPlan, syncStatus, actions } = useCarbonContext();
+  const { refreshAssistantPlan } = actions;
+
+  useEffect(() => {
+    refreshAssistantPlan('reduce monthly footprint with practical lifestyle changes');
+  }, [refreshAssistantPlan]);
 
   const categoryTotals = emissionsData.reduce(
     (acc, curr) => {
@@ -92,12 +97,45 @@ export default function Insights() {
                   </div>
                 </div>
                 <p className="emitter-description">
-                  {highest.name} accounts for {((highest.value / (grandTotal || 1)) * 100).toFixed(0)}% of your overall carbon footprint. Focus on your transport habits or household efficiency to make the biggest impact. Check out our **Tips** page for actions you can take today!
+                  {highest.name} accounts for {((highest.value / (grandTotal || 1)) * 100).toFixed(0)}% of your overall carbon footprint. Focus on your highest-impact habits first, then use the Tips page for actions you can take today.
                 </p>
               </div>
             );
           })()}
         </div>
+      </div>
+
+      <div className="card assistant-card">
+        <div className="assistant-card-header">
+          <div className="assistant-title-group">
+            <Sparkles size={20} className="assistant-icon" />
+            <div>
+              <h3>Smart Carbon Coach</h3>
+              <p className="card-subtitle">Personalized next steps from your latest footprint context</p>
+            </div>
+          </div>
+          <span className={`sync-pill ${syncStatus}`}>{syncStatus}</span>
+        </div>
+
+        {assistantPlan ? (
+          <>
+            <p className="assistant-message">{assistantPlan.message}</p>
+            <div className="assistant-actions-grid">
+              {assistantPlan.nextActions.map((action) => (
+                <div className="assistant-action" key={action.title}>
+                  <div className="assistant-action-topline">
+                    <h4>{action.title}</h4>
+                    <span className={`badge-difficulty ${action.effort}`}>{action.effort}</span>
+                  </div>
+                  <p>{action.rationale}</p>
+                  <span className="saving-value text-mono">-{action.impactKgPerYear} kg CO2 / yr</span>
+                </div>
+              ))}
+            </div>
+          </>
+        ) : (
+          <p className="assistant-message">Start the API server to unlock live, context-aware coaching. The app still works locally with default data.</p>
+        )}
       </div>
     </div>
   );

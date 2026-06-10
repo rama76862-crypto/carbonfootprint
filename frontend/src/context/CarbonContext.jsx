@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState, useMemo } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { carbonApi } from '../services/carbonApi';
 
 const CarbonContext = createContext();
 
@@ -7,7 +8,8 @@ export function CarbonProvider({ children }) {
     name: 'Alex Eco',
     location: 'India',
     householdSize: 3,
-    annualTarget: 2.0
+    annualTarget: 2.0,
+    persona: 'urban_family'
   });
 
   const [emissionsData, setEmissionsData] = useState([
@@ -19,26 +21,72 @@ export function CarbonProvider({ children }) {
     { month: 'June', transport: 0.35, home: 0.20, food: 0.09, shopping: 0.13, total: 0.77 }
   ]);
 
-  const addEmissionsEntry = (entry) => {
+  const [syncStatus, setSyncStatus] = useState('idle');
+  const [assistantPlan, setAssistantPlan] = useState(null);
+
+  useEffect(() => {
+    let active = true;
+
+    async function loadBackendState() {
+      setSyncStatus('loading');
+
+      try {
+        const [profile, emissionsResponse] = await Promise.all([
+          carbonApi.getProfile(),
+          carbonApi.getEmissions()
+        ]);
+
+        if (!active) return;
+        setUserProfile(profile);
+        setEmissionsData(emissionsResponse.emissions);
+        setSyncStatus('synced');
+      } catch (error) {
+        if (!active) return;
+        console.warn('Using local carbon defaults because the API is unavailable:', error.message);
+        setSyncStatus('offline');
+      }
+    }
+
+    loadBackendState();
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const addEmissionsEntry = useCallback((entry) => {
     const transport = parseFloat(entry.transport) || 0;
     const home = parseFloat(entry.home) || 0;
     const food = parseFloat(entry.food) || 0;
     const shopping = parseFloat(entry.shopping) || 0;
     const total = transport + home + food + shopping;
+    const normalizedEntry = { ...entry, transport, home, food, shopping, total };
 
     setEmissionsData((prev) => {
       // If month already exists, update it. Otherwise append.
       const index = prev.findIndex((e) => e.month.toLowerCase() === entry.month.toLowerCase());
       if (index !== -1) {
         const updated = [...prev];
-        updated[index] = { ...entry, transport, home, food, shopping, total: parseFloat(total.toFixed(3)) };
+        updated[index] = normalizedEntry;
         return updated;
       }
-      return [...prev, { ...entry, transport, home, food, shopping, total: parseFloat(total.toFixed(3)) }];
+      return [...prev, normalizedEntry];
     });
-  };
 
-  const updateEntry = (month, updatedFields) => {
+    carbonApi.saveEmission(normalizedEntry)
+      .then((response) => {
+        setEmissionsData(response.emissions);
+        setSyncStatus('synced');
+      })
+      .catch((error) => {
+        console.warn('Could not persist emissions entry:', error.message);
+        setSyncStatus('offline');
+      });
+  }, []);
+
+  const updateEntry = useCallback((month, updatedFields) => {
+    let patchedEntry = null;
+
     setEmissionsData((prev) =>
       prev.map((entry) => {
         if (entry.month.toLowerCase() === month.toLowerCase()) {
@@ -48,25 +96,66 @@ export function CarbonProvider({ children }) {
           const food = parseFloat(merged.food) || 0;
           const shopping = parseFloat(merged.shopping) || 0;
           const total = transport + home + food + shopping;
-          return { ...merged, transport, home, food, shopping, total: parseFloat(total.toFixed(3)) };
+          patchedEntry = { ...merged, transport, home, food, shopping, total: parseFloat(total.toFixed(3)) };
+          return patchedEntry;
         }
         return entry;
       })
     );
-  };
 
-  const updateProfile = (profileUpdates) => {
+    carbonApi.updateEmission(month, updatedFields)
+      .then((response) => {
+        setEmissionsData(response.emissions);
+        setSyncStatus('synced');
+      })
+      .catch((error) => {
+        if (patchedEntry) {
+          console.warn('Local entry updated but API sync failed:', error.message);
+        }
+        setSyncStatus('offline');
+      });
+  }, []);
+
+  const updateUserProfile = useCallback((profile) => {
+    setUserProfile((prev) => ({ ...prev, ...profile }));
+
+    carbonApi.updateProfile(profile)
+      .then((updatedProfile) => {
+        setUserProfile(updatedProfile);
+        setSyncStatus('synced');
+      })
+      .catch((error) => {
+        console.warn('Could not persist user profile:', error.message);
+        setSyncStatus('offline');
+      });
+  }, []);
+
+  const refreshAssistantPlan = useCallback(async (goal = 'reduce monthly footprint') => {
+    try {
+      const plan = await carbonApi.getAssistantPlan(goal);
+      setAssistantPlan(plan);
+      setSyncStatus('synced');
+      return plan;
+    } catch (error) {
+      console.warn('Could not load assistant plan:', error.message);
+      setSyncStatus('offline');
+      return null;
+    }
+  }, []);
+
+  const updateProfile = useCallback((profileUpdates) => {
     setUserProfile((prev) => ({
       ...prev,
       ...profileUpdates
     }));
-  };
+    updateUserProfile(profileUpdates);
+  }, [updateUserProfile]);
 
-  const resetEmissionsData = () => {
+  const resetEmissionsData = useCallback(() => {
     setEmissionsData([]);
-  };
+  }, []);
 
-  const importEmissionsData = (data) => {
+  const importEmissionsData = useCallback((data) => {
     if (Array.isArray(data)) {
       const cleanData = data.map((entry) => {
         const transport = parseFloat(entry.transport) || 0;
@@ -85,7 +174,7 @@ export function CarbonProvider({ children }) {
       });
       setEmissionsData(cleanData);
     }
-  };
+  }, []);
 
   // totalAnnual is computed dynamically
   const totalAnnual = useMemo(() => {
@@ -93,19 +182,35 @@ export function CarbonProvider({ children }) {
     return parseFloat(sum.toFixed(2));
   }, [emissionsData]);
 
-  const value = {
+  const value = useMemo(() => ({
     userProfile,
     emissionsData,
     totalAnnual,
+    syncStatus,
+    assistantPlan,
     actions: {
-      setUserProfile,
+      setUserProfile: updateUserProfile,
       addEmissionsEntry,
       updateEntry,
       updateProfile,
       resetEmissionsData,
-      importEmissionsData
+      importEmissionsData,
+      refreshAssistantPlan
     }
-  };
+  }), [
+    userProfile,
+    emissionsData,
+    totalAnnual,
+    syncStatus,
+    assistantPlan,
+    updateUserProfile,
+    addEmissionsEntry,
+    updateEntry,
+    updateProfile,
+    resetEmissionsData,
+    importEmissionsData,
+    refreshAssistantPlan
+  ]);
 
   return (
     <CarbonContext.Provider value={value}>

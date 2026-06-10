@@ -5,9 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "api": "node ../server/server.js",
     "build": "vite build",
     "lint": "eslint .",
-    "test": "node src/utils/test-suite.js",
+    "test": "node src/utils/test-suite.js && node --test ../server/*.test.js",
     "preview": "vite preview"
   },
   "dependencies": {

@@ -1,0 +1,21 @@
+export const defaultProfile = {
+  name: 'Alex Eco',
+  location: 'India',
+  householdSize: 3,
+  annualTarget: 2.0,
+  persona: 'urban_family'
+};
+
+export const defaultEmissions = [
+  { month: 'January', transport: 0.45, home: 0.35, food: 0.09, shopping: 0.12, total: 1.01 },
+  { month: 'February', transport: 0.4, home: 0.32, food: 0.09, shopping: 0.1, total: 0.91 },
+  { month: 'March', transport: 0.42, home: 0.28, food: 0.09, shopping: 0.15, total: 0.94 },
+  { month: 'April', transport: 0.38, home: 0.25, food: 0.09, shopping: 0.11, total: 0.83 },
+  { month: 'May', transport: 0.48, home: 0.22, food: 0.09, shopping: 0.18, total: 0.97 },
+  { month: 'June', transport: 0.35, home: 0.2, food: 0.09, shopping: 0.13, total: 0.77 }
+];
+
+export const defaultState = {
+  profile: defaultProfile,
+  emissions: defaultEmissions
+};

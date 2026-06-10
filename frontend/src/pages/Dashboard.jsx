@@ -1,7 +1,6 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCarbonContext } from '../context/CarbonContext';
-import { getEmissionsCategory } from '../utils/calculations';
 import { GLOBAL_AVERAGE, TARGET, COUNTRY_AVERAGES } from '../utils/constants';
 import { 
   Plus, 
@@ -11,11 +10,7 @@ import {
   Flame,
   ArrowUpRight,
   ArrowDownRight,
-  Leaf,
-  Car,
-  Home as HomeIcon,
-  Utensils,
-  ShoppingBag
+  Leaf
 } from 'lucide-react';
 import { 
   ResponsiveContainer, 

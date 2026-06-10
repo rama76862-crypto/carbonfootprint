@@ -1,4 +1,3 @@
-import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { useCarbonContext } from '../../context/CarbonContext';
 import { LayoutDashboard, Pencil, BarChart3, Lightbulb, Settings, User, BrainCircuit } from 'lucide-react';

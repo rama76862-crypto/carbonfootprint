@@ -1,6 +1,6 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Car, Home as HomeIcon, Utensils, ShoppingBag, Eye, ArrowRight, Search, BarChart3, Target } from 'lucide-react';
+import { Car, Home as HomeIcon, Utensils, ShoppingBag, ArrowRight, Search, BarChart3, Target } from 'lucide-react';
 import './Home.css';
 
 export default function Home() {

@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCarbonContext } from '../context/CarbonContext';
 import { 
@@ -15,14 +15,12 @@ import {
   ShoppingBag, 
   Plus, 
   Minus, 
-  Trash2, 
+  Trash2,
   Check, 
-  Compass, 
   Plane, 
   Bus, 
   Train, 
   Bike, 
-  Info,
   Calendar
 } from 'lucide-react';
 import './Tracker.css';

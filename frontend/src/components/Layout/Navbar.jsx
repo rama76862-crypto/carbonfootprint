@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useCarbonContext } from '../../context/CarbonContext';
 import { Menu, X, Leaf } from 'lucide-react';
