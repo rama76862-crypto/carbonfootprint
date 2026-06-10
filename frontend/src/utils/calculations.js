@@ -1,4 +1,4 @@
-import { EMISSION_FACTORS } from './constants';
+import { EMISSION_FACTORS } from './constants.js';
 
 /**
  * Calculates transport emissions in tonnes of CO2.

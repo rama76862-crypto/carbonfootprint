@@ -25,6 +25,19 @@ export const GLOBAL_AVERAGE = 4.7; // tonnes CO2 / year
 export const INDIA_AVERAGE = 1.9;  // tonnes CO2 / year
 export const TARGET = 2.0;         // Paris Agreement target tonnes CO2 / year
 
+export const COUNTRY_AVERAGES = {
+  'India': 1.9,
+  'United States': 14.7,
+  'China': 7.6,
+  'Germany': 7.9,
+  'United Kingdom': 4.7,
+  'Brazil': 2.2,
+  'Japan': 8.6,
+  'Australia': 15.0,
+  'Canada': 14.2,
+  'Global Average': 4.7
+};
+
 export const MONTHS = [
   'January',
   'February',

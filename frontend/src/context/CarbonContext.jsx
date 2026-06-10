@@ -6,7 +6,8 @@ export function CarbonProvider({ children }) {
   const [userProfile, setUserProfile] = useState({
     name: 'Alex Eco',
     location: 'India',
-    householdSize: 3
+    householdSize: 3,
+    annualTarget: 2.0
   });
 
   const [emissionsData, setEmissionsData] = useState([
@@ -30,10 +31,10 @@ export function CarbonProvider({ children }) {
       const index = prev.findIndex((e) => e.month.toLowerCase() === entry.month.toLowerCase());
       if (index !== -1) {
         const updated = [...prev];
-        updated[index] = { ...entry, transport, home, food, shopping, total };
+        updated[index] = { ...entry, transport, home, food, shopping, total: parseFloat(total.toFixed(3)) };
         return updated;
       }
-      return [...prev, { ...entry, transport, home, food, shopping, total }];
+      return [...prev, { ...entry, transport, home, food, shopping, total: parseFloat(total.toFixed(3)) }];
     });
   };
 
@@ -47,11 +48,43 @@ export function CarbonProvider({ children }) {
           const food = parseFloat(merged.food) || 0;
           const shopping = parseFloat(merged.shopping) || 0;
           const total = transport + home + food + shopping;
-          return { ...merged, transport, home, food, shopping, total };
+          return { ...merged, transport, home, food, shopping, total: parseFloat(total.toFixed(3)) };
         }
         return entry;
       })
     );
+  };
+
+  const updateProfile = (profileUpdates) => {
+    setUserProfile((prev) => ({
+      ...prev,
+      ...profileUpdates
+    }));
+  };
+
+  const resetEmissionsData = () => {
+    setEmissionsData([]);
+  };
+
+  const importEmissionsData = (data) => {
+    if (Array.isArray(data)) {
+      const cleanData = data.map((entry) => {
+        const transport = parseFloat(entry.transport) || 0;
+        const home = parseFloat(entry.home) || 0;
+        const food = parseFloat(entry.food) || 0;
+        const shopping = parseFloat(entry.shopping) || 0;
+        const total = transport + home + food + shopping;
+        return {
+          month: entry.month || 'Unknown',
+          transport,
+          home,
+          food,
+          shopping,
+          total: parseFloat(total.toFixed(3))
+        };
+      });
+      setEmissionsData(cleanData);
+    }
   };
 
   // totalAnnual is computed dynamically
@@ -67,7 +100,10 @@ export function CarbonProvider({ children }) {
     actions: {
       setUserProfile,
       addEmissionsEntry,
-      updateEntry
+      updateEntry,
+      updateProfile,
+      resetEmissionsData,
+      importEmissionsData
     }
   };
 

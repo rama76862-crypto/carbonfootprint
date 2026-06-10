@@ -9,13 +9,18 @@ import Dashboard from './pages/Dashboard';
 import Tracker from './pages/Tracker';
 import Insights from './pages/Insights';
 import Tips from './pages/Tips';
+import Assistant from './pages/Assistant';
+import Settings from './pages/Settings';
+import AssistantWidget from './components/AssistantWidget';
+import InteractiveCursor from './components/InteractiveCursor';
 
 function AppContent() {
   const location = useLocation();
-  const showSidebar = ['/dashboard', '/tracker', '/insights', '/tips', '/settings'].includes(location.pathname);
+  const showSidebar = ['/dashboard', '/tracker', '/insights', '/tips', '/settings', '/assistant'].includes(location.pathname);
 
   return (
     <div className="app-wrapper">
+      <InteractiveCursor />
       <Navbar />
       <div className="main-container">
         {showSidebar && <Sidebar />}
@@ -26,20 +31,8 @@ function AppContent() {
             <Route path="/tracker" element={<Tracker />} />
             <Route path="/insights" element={<Insights />} />
             <Route path="/tips" element={<Tips />} />
-            <Route
-              path="/settings"
-              element={
-                <div className="inner-page">
-                  <div className="page-header">
-                    <h1 className="page-title">Settings</h1>
-                    <p className="page-description">Manage your profile and footprint variables.</p>
-                  </div>
-                  <div className="card">
-                    <p>Settings form options will be implemented here.</p>
-                  </div>
-                </div>
-              }
-            />
+            <Route path="/assistant" element={<Assistant />} />
+            <Route path="/settings" element={<Settings />} />
             <Route
               path="*"
               element={
@@ -53,6 +46,7 @@ function AppContent() {
           </Routes>
         </main>
       </div>
+      {showSidebar && <AssistantWidget />}
       {!showSidebar && <Footer />}
     </div>
   );

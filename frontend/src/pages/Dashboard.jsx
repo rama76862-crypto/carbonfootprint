@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCarbonContext } from '../context/CarbonContext';
 import { getEmissionsCategory } from '../utils/calculations';
-import { GLOBAL_AVERAGE, TARGET } from '../utils/constants';
+import { GLOBAL_AVERAGE, TARGET, COUNTRY_AVERAGES } from '../utils/constants';
 import { 
   Plus, 
   TrendingUp, 
@@ -122,8 +122,21 @@ export default function Dashboard() {
   const strokeDashoffset = circumference - (circumference * ringPercent) / 100;
 
   // Comparison metrics vs benchmarks
-  const diffIndia = totalAnnual - 1.9;
-  const diffParis = totalAnnual - TARGET;
+  const countryAvg = useMemo(() => {
+    return COUNTRY_AVERAGES[userProfile.location] || 1.9;
+  }, [userProfile.location]);
+
+  const diffIndia = useMemo(() => {
+    return parseFloat((totalAnnual - countryAvg).toFixed(2));
+  }, [totalAnnual, countryAvg]);
+
+  const targetVal = useMemo(() => {
+    return userProfile.annualTarget || TARGET;
+  }, [userProfile.annualTarget]);
+
+  const diffParis = useMemo(() => {
+    return parseFloat((totalAnnual - targetVal).toFixed(2));
+  }, [totalAnnual, targetVal]);
 
   // 4. Calendar Heatmap Generation (June 2026 starting Monday, June 1st)
   const heatmapDays = useMemo(() => {
@@ -309,14 +322,14 @@ export default function Dashboard() {
 
             <div className="comparison-rows">
               <div className="comp-row">
-                <span>vs. India avg ({1.9} t)</span>
+                <span>vs. {userProfile.location} avg ({countryAvg.toFixed(1)} t)</span>
                 <span className={`comp-val ${diffIndia > 0 ? 'red' : 'green'}`}>
                   {diffIndia > 0 ? `+${diffIndia.toFixed(1)}` : diffIndia.toFixed(1)}
                   {diffIndia > 0 ? <ArrowUpRight size={14} /> : <ArrowDownRight size={14} />}
                 </span>
               </div>
               <div className="comp-row">
-                <span>vs. Paris target ({TARGET} t)</span>
+                <span>vs. Target limit ({targetVal.toFixed(1)} t)</span>
                 <span className={`comp-val ${diffParis > 0 ? 'red' : 'green'}`}>
                   {diffParis > 0 ? `+${diffParis.toFixed(1)}` : diffParis.toFixed(1)}
                   {diffParis > 0 ? <ArrowUpRight size={14} /> : <ArrowDownRight size={14} />}

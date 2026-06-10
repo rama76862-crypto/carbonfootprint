@@ -15,7 +15,8 @@ export default function Navbar() {
     { name: 'Dashboard', path: '/dashboard' },
     { name: 'Tracker', path: '/tracker' },
     { name: 'Insights', path: '/insights' },
-    { name: 'Tips', path: '/tips' }
+    { name: 'Tips', path: '/tips' },
+    { name: 'Assistant', path: '/assistant' }
   ];
 
   return (

@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { useCarbonContext } from '../../context/CarbonContext';
-import { LayoutDashboard, Pencil, BarChart3, Lightbulb, Settings, User } from 'lucide-react';
+import { LayoutDashboard, Pencil, BarChart3, Lightbulb, Settings, User, BrainCircuit } from 'lucide-react';
 import './Sidebar.css';
 
 export default function Sidebar() {
@@ -11,7 +11,8 @@ export default function Sidebar() {
     { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
     { name: 'Tracker', path: '/tracker', icon: Pencil },
     { name: 'Insights', path: '/insights', icon: BarChart3 },
-    { name: 'Tips', path: '/tips', icon: Lightbulb }
+    { name: 'Tips', path: '/tips', icon: Lightbulb },
+    { name: 'Eco Assistant', path: '/assistant', icon: BrainCircuit }
   ];
 
   return (
