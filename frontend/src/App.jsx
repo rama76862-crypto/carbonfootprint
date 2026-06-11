@@ -11,7 +11,6 @@ import Tips from './pages/Tips';
 import Assistant from './pages/Assistant';
 import Settings from './pages/Settings';
 import AssistantWidget from './components/AssistantWidget';
-import InteractiveCursor from './components/InteractiveCursor';
 
 function AppContent() {
   const location = useLocation();
@@ -19,7 +18,6 @@ function AppContent() {
 
   return (
     <div className="app-wrapper">
-      <InteractiveCursor />
       <Navbar />
       <div className="main-container">
         {showSidebar && <Sidebar />}

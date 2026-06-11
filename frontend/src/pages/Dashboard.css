@@ -27,7 +27,7 @@
 
 .mini-card:hover {
   transform: translateY(-2px);
-  border-color: rgba(46, 204, 113, 0.15);
+  border-color: rgba(56, 189, 248, 0.15);
 }
 
 .mini-card-icon-wrapper {
@@ -41,7 +41,7 @@
 }
 
 /* Icons styling for mini cards */
-.total-icon { background: rgba(46, 204, 113, 0.1); color: var(--color-accent); border: 1px solid rgba(46, 204, 113, 0.15); }
+.total-icon { background: rgba(56, 189, 248, 0.1); color: var(--color-accent); border: 1px solid rgba(56, 189, 248, 0.15); }
 .best-icon { background: rgba(52, 152, 219, 0.1); color: #3498DB; border: 1px solid rgba(52, 152, 219, 0.15); }
 .biggest-icon { background: rgba(243, 156, 18, 0.1); color: var(--color-warning); border: 1px solid rgba(243, 156, 18, 0.15); }
 .logged-icon { background: rgba(155, 89, 182, 0.1); color: #9B59B6; border: 1px solid rgba(155, 89, 182, 0.15); }
@@ -240,7 +240,7 @@
 
 .heatmap-cell.logged {
   background: var(--color-accent);
-  box-shadow: 0 0 6px rgba(46, 204, 113, 0.2);
+  box-shadow: 0 0 6px rgba(56, 189, 248, 0.2);
 }
 
 .heatmap-cell.empty {
