@@ -26,7 +26,7 @@ Decision logic:
 ## Project Structure
 
 - `frontend/` - React + Vite app.
-- `server/` - dependency-free Node.js API.
+- `backend/` - dependency-free Node.js API.
 - `data/carbon-data.json` - local JSON persistence seed.
 
 ## Backend API

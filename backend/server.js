@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import http from 'node:http';
 import { URL } from 'node:url';
 import { createAssistantPlan } from './assistant.js';
@@ -87,7 +88,8 @@ export async function handleRequest(req, res) {
     if (req.method === 'POST' && url.pathname === '/api/assistant') {
       const state = await readState();
       const body = await readJson(req);
-      return sendJson(res, 200, createAssistantPlan({ ...state, goal: body.goal }));
+      const plan = await createAssistantPlan({ ...state, goal: body.goal });
+      return sendJson(res, 200, plan);
     }
 
     return sendJson(res, 404, { error: 'route not found' });

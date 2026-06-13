@@ -119,6 +119,11 @@ export default function Insights() {
 
         {assistantPlan ? (
           <>
+            {assistantPlan.provider === 'fallback' && assistantPlan.providerError ? (
+              <p className="assistant-message" style={{ color: 'var(--color-warning)' }}>
+                {assistantPlan.providerError}
+              </p>
+            ) : null}
             <p className="assistant-message">{assistantPlan.message}</p>
             <div className="assistant-actions-grid">
               {assistantPlan.nextActions.map((action) => (
